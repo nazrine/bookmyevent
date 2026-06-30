@@ -1,0 +1,33 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Rahul Kumar",
+      "email": "rahul@gmail.com",
+      "password": "password123",
+      "role": "client"
+    },
+    {
+      "id": "2",
+      "name": "Royal Events Admin",
+      "email": "royal@events.com",
+      "password": "manager123",
+      "role": "manager",
+      "manager_id": "m_101"
+    },
+    {
+      "email": "nazrine@gmail.com",
+      "name": "nazrine",
+      "role": "client",
+      "id": "Ha28KOFh7Ls"
+    },
+    {
+      "email": "admin@gmail.com",
+      "name": "admin",
+      "role": "manager",
+      "id": "jtowXD4QFuI"
+    }
+  ],
+  "enquiries": [],
+  "$schema": "./node_modules/json-server/schema.json"
+}
