@@ -156,20 +156,30 @@ const changeCity = (city) => {
     </div>
   </nav>
 
-  <div class="sub-navbar py-2 border-bottom text-start d-none d-lg-block">
-    <div class="container d-flex justify-content-between align-items-center">
-      <div class="d-flex gap-4 small fw-bold text-secondary">
-        <a href="/" class="text-dark text-decoration-none">Home</a>
-        <router-link to="/about" class="text-secondary text-decoration-none">About</router-link>
-        <router-link to="/contact" class="text-secondary text-decoration-none">Contact</router-link>
-        <router-link v-if="isLoggedIn" to="/mybookings" class="text-secondary text-decoration-none">📑 My Bookings</router-link>
-      </div>
-      <div class="d-flex gap-3 small text-muted">
-        <span class="cursor-pointer">Offers</span>
-        <span class="cursor-pointer">Gift Cards</span>
-      </div>
+<!-- SUB NAVBAR -->
+<div class="sub-navbar py-2 border-bottom text-start d-none d-lg-block">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div class="d-flex gap-4 small fw-bold text-secondary">
+      <router-link to="/" class="text-dark text-decoration-none">Home</router-link>
+      <router-link to="/about" class="text-secondary text-decoration-none">About</router-link>
+      <router-link to="/contact" class="text-secondary text-decoration-none">Contact</router-link>
+      
+      <!-- 💼 ലോഗിൻ ചെയ്തത് മാനേജർ ആണെങ്കിൽ മാത്രം ഈ ലിങ്ക് കാണിക്കും -->
+      <router-link v-if="isLoggedIn && localStorage.getItem('user-info') && JSON.parse(localStorage.getItem('user-info')).role === 'manager'" to="/manager-dashboard" class="text-danger text-decoration-none">
+        💼 Manager Dashboard
+      </router-link>
+
+      <!-- 📑 ലോഗിൻ ചെയ്തത് ക്ലയന്റ് ആണെങ്കിൽ മാത്രം ഈ ലിങ്ക് കാണിക്കും -->
+      <router-link v-if="isLoggedIn && localStorage.getItem('user-info') && JSON.parse(localStorage.getItem('user-info')).role === 'client'" to="/mybookings" class="text-secondary text-decoration-none">
+        📑 My Bookings
+      </router-link>
+    </div>
+    <div class="d-flex gap-3 small text-muted">
+      <span class="cursor-pointer">Offers</span>
+      <span class="cursor-pointer">Gift Cards</span>
     </div>
   </div>
+</div>
 
   <router-view></router-view>
 
