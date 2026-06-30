@@ -7,6 +7,7 @@ const router = useRouter();
 // 📢 GLOBAL & AUTH STATES
 const isLoggedIn = ref(false);
 const userName = ref('Guest');
+const userRole = ref('');
 const selectedCity = ref('Kochi');
 
 const email = ref('');
@@ -21,8 +22,10 @@ const authLoading = ref(false);
 onMounted(() => {
   const userInfo = localStorage.getItem('user-info');
   if (userInfo) {
+    const user = JSON.parse(userInfo);
     isLoggedIn.value = true;
-    userName.value = JSON.parse(userInfo).name || 'User';
+    userName.value = user.name || 'User';
+    userRole.value =user.role;
   }
 });
 
@@ -92,13 +95,21 @@ const handleRegister = async () => {
 const saveUserAndRefresh = (user) => {
   localStorage.setItem('user-info', JSON.stringify(user));
   isLoggedIn.value = true;
-  userName.value = user.name;
-  
-  // മുകളിൽ പോപ്പ്അപ്പ് ക്ലോസ് ആകാനും ഡാഷ്ബോർഡ് മാറാനും വിൻഡോ റീഫ്രഷ് ചെയ്യുന്നു
+  userName.value = user.name || 'User';
+  userRole.value = user.role; // പുതിയ റിയാക്ടീവ് സ്റ്റേറ്റ്
+
+  // Bootstrap Modal തനിയെ ക്ലോസ് ആകാൻ വേണ്ടി (പോപ്പ്അപ്പ് ബാക്ക്ഗ്രൗണ്ടിലെ കറുപ്പ് മാറാൻ)
+  const modalElement = document.getElementById('loginModal');
+  const modalInstance = bootstrap.Modal.getInstance(modalElement);
+  if (modalInstance) {
+    modalInstance.hide();
+  }
+
+  // റോൾ അനുസരിച്ച് റീഡയറക്ട് ചെയ്യുന്നു
   if (user.role === 'manager') {
-    window.location.href = '/manager-dashboard';
+    router.push('/manager-dashboard');
   } else {
-    window.location.reload();
+    router.push('/');
   }
 };
 
@@ -165,12 +176,12 @@ const changeCity = (city) => {
       <router-link to="/contact" class="text-secondary text-decoration-none">Contact</router-link>
       
       <!-- 💼 ലോഗിൻ ചെയ്തത് മാനേജർ ആണെങ്കിൽ മാത്രം ഈ ലിങ്ക് കാണിക്കും -->
-      <router-link v-if="isLoggedIn && localStorage.getItem('user-info') && JSON.parse(localStorage.getItem('user-info')).role === 'manager'" to="/manager-dashboard" class="text-danger text-decoration-none">
+      <router-link v-if="isLoggedIn && userRole === 'manager'" to="/manager-dashboard" class="text-danger text-decoration-none">
         💼 Manager Dashboard
       </router-link>
 
       <!-- 📑 ലോഗിൻ ചെയ്തത് ക്ലയന്റ് ആണെങ്കിൽ മാത്രം ഈ ലിങ്ക് കാണിക്കും -->
-      <router-link v-if="isLoggedIn && localStorage.getItem('user-info') && JSON.parse(localStorage.getItem('user-info')).role === 'client'" to="/mybookings" class="text-secondary text-decoration-none">
+      <router-link v-if="isLoggedIn && userRole === 'client'" to="/mybookings" class="text-secondary text-decoration-none">
         📑 My Bookings
       </router-link>
     </div>
